@@ -1,6 +1,6 @@
 import time
 from bull_flag_pattern import BullFlagPattern
-from finvizScreener import FinvizScreener
+from finviz_screener import FinvizScreener
 
 def main(assHand=None):
     finvizScreener = FinvizScreener();
@@ -11,9 +11,6 @@ def main(assHand=None):
             #print("Working on stock", stock)
             bullFlatPattern.checkType1BullFlagPattern(stock, interval='5Min',limit=78)
         print("________________________________________________________________________________________________")
-        for stock in stocks:
-            print("Working on stock", stock)
-            bullFlatPattern.checkType2BullFlagPattern(stock, interval='5Min',limit=78)
 
         print("Sleeping")
         time.sleep(320)
