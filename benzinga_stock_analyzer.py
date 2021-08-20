@@ -10,7 +10,7 @@ import tulipy as ti
 import pandas as pd
 
 import time
-from bullFlagPattern import BullFlagPattern
+from bull_flag_pattern import BullFlagPattern
 from benzinga_screener import BenzingaScreener
 
 def main(assHand=None):

@@ -16,18 +16,18 @@ class BullFlagPattern:
             upflag = 0;
             downflag = 0;
             firstBull=0;
-            for i, j in bar_iter.iterrows():
+            for time, currentCandle in bar_iter.iterrows():
                 if (count == 0):
-                    prev = j
+                    prev = currentCandle
                     count = count + 1
                 else:
-                    bullOrBearCandle = self.candleType(stock, j);
-                    if bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, j) == 1:
-                        if upflag == 1 and downflag == 1 and firstBull < j[stock]['close'] :
+                    bullOrBearCandle = self.candleType(stock, currentCandle);
+                    if bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, currentCandle) == 1:
+                        if upflag == 1 and downflag == 1 and firstBull < currentCandle[stock]['close'] :
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", i)
+                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
-                            print("Stock", stock, "Bull flag detected at time", i, i.tz_convert('utc'))
+                            print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
                             print()
                             downflag = 0
@@ -40,22 +40,22 @@ class BullFlagPattern:
                             bull = 0
                             bear = 0
                         if bull == 0:
-                            firstBull = j[stock]['close'];
-                            ema10 = ti.ema(stock.df.close.dropna().to_numpy(), 10)
+                            firstBull = currentCandle[stock]['close'];
+                            #ema10 = ti.ema(stock.df.close.dropna().to_numpy(), 10)
 
                         bull = bull + 1
                         if (bull >= 2):
                             upflag = 1;
-                    elif bullOrBearCandle == 'red' and self.isLowerThan(stock, prev, j) == 1 and upflag == 1:
+                    elif bullOrBearCandle == 'red' and self.isLowerThan(stock, prev, currentCandle) == 1 and upflag == 1:
                         bear = bear + 1
                         if (bear >= 2):
                             downflag = 1;
                     elif bullOrBearCandle == 'green':
-                        if upflag == 1 and downflag == 1 and firstBull < j[stock]['close'] :
+                        if upflag == 1 and downflag == 1 and firstBull < currentCandle[stock]['close'] :
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", i)
+                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
-                            print("Stock", stock, "Bull flag dected at time", i, i.tz_convert('utc'))
+                            print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['close'])
                             print()
                         downflag = 0
@@ -67,7 +67,7 @@ class BullFlagPattern:
                         upflag = 0
                         bull = 0
                         bear = 0
-                    prev = j;
+                    prev = currentCandle;
 
         except Exception as e:
             print(e)

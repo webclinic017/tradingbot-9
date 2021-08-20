@@ -1,5 +1,5 @@
 import time
-from bullFlagPattern import BullFlagPattern
+from bull_flag_pattern import BullFlagPattern
 from finvizScreener import FinvizScreener
 
 def main(assHand=None):
