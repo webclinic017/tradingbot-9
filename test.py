@@ -43,6 +43,7 @@ def main(assHand=None):
     #my_list = stocks.split(",")
     for l in stocks:
         stock = l;
+        print("Working on stock", stock)
         load_historical_data(stock,interval='5Min',limit=78);
 
 

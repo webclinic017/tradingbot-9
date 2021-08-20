@@ -1,0 +1,27 @@
+bin/
+target/
+test-output/
+logs/
+.idea/
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Eclipse artifacts
+.project
+.classpath
+.settings
+
+# Package artifacts
+*.jar
+*.war
+*.ear
+**/.sts4-cache/*
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+ajcore*.txt
+
+.DS_Store
+*.swp
