@@ -19,7 +19,7 @@ from datetime import date
 
 def main(assHand=None):
     benzingaScreener = BenzingaScreener();
-    realtime = 0
+    realtime = 1
     limit = 10
     if (realtime == 0):
         limit = 78
