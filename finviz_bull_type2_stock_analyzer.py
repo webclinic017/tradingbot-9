@@ -12,9 +12,9 @@ def main():
     if(realtime == 0):
         limit=78
 
-    stock_alert_filename= "stock_alert_bull_type_2_"+str(date.today())+".csv"
-    stoploss_alert_filename= "stoploss_alert_bull_type_2_"+str(date.today())+".csv"
-    target_achieved_filename =  "target_achieved_bull_type_2_"+str(date.today())+".csv"
+    stock_alert_filename= "predictions/finviz/"+"stock_alert_bull_type_2_"+str(date.today())+".csv"
+    stoploss_alert_filename= "predictions/finviz/"+"stoploss_alert_bull_type_2_"+str(date.today())+".csv"
+    target_achieved_filename =  "predictions/finviz/"+"target_achieved_bull_type_2_"+str(date.today())+".csv"
     bull_flag_2_alert_file = open(stock_alert_filename, "a+")
     stoploss_alert_file = open(stoploss_alert_filename, "a+")
     target_achieved_alert_file  = open(target_achieved_filename, "a+")
