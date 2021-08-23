@@ -25,21 +25,18 @@ def main(assHand=None):
         limit = 78
 
     stock_alert_filename = "predictions/benzinga/"+"stock_alert_bull_type_1_" + str(date.today()) + ".csv"
-    stoploss_alert_filename = "predictions/benzinga/"+"stoploss_alert_bull_type_1_" + str(date.today()) + ".csv"
-    target_achieved_filename = "predictions/benzinga/"+"target_achieved_bull_type_1_" + str(date.today()) + ".csv"
+    trade_executions_filename = "predictions/trade_executions_" + str(date.today()) + ".csv"
     bull_flag_1_alert_file = open(stock_alert_filename, "a+")
-    stoploss_alert_file = open(stoploss_alert_filename, "a+")
-    target_achieved_alert_file = open(target_achieved_filename, "a+")
+    trade_executions_file = open(trade_executions_filename, "a+")
 
     if (os.stat(stock_alert_filename).st_size == 0):
         bull_flag_1_alert_file.write("Stock, Type, Time, Stoploss")
         bull_flag_1_alert_file.write("\n")
-    if (os.stat(stoploss_alert_filename).st_size == 0):
-        stoploss_alert_file.write("Stock, Type, Time, Stoploss")
-        stoploss_alert_file.write("\n")
-    if (os.stat(target_achieved_filename).st_size == 0):
-        target_achieved_alert_file.write("Stock, Type, Time, Stoploss")
-        target_achieved_alert_file.write("\n")
+    if (os.stat(trade_executions_filename).st_size == 0):
+        trade_executions_file.write("Stock, Type, Time, Stoploss, Entry Price, R, Target Price, Prediction Type")
+        trade_executions_file.write("\n")
+        trade_executions_file.flush()
+
 
     while True:
         stocks = benzingaScreener.get_gainers_for_session();
