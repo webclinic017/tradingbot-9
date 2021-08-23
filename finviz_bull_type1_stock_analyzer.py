@@ -26,14 +26,14 @@ def main():
         trade_executions_file.write("Stock, Type, Time, Stoploss, Entry Price, R, Target Price, Prediction Type")
         trade_executions_file.write("\n")
         trade_executions_file.flush()
-
+    Dict = {}
     while True:
         stocks = finvizScreener.positive_movers_with_beta_over_2();
         bullFlatPattern = BullFlagPattern();
         transaction = Transaction(0,0);
         for stock in stocks:
             #print("Working on stock", stock)
-            bullFlagInformation = bullFlatPattern.checkType1BullFlagPattern(stock, bull_flag_1_alert_file, interval='5Min',limit=limit)
+            bullFlagInformation = bullFlatPattern.checkType1BullFlagPattern(stock, bull_flag_1_alert_file, Dict, interval='5Min',limit=limit)
             if(realtime == 0):
                 bull_flag_verifier = BullFlagVerifier()
                 bull_flag_verifier.verifyBullFlag(bullFlagInformation, transaction)

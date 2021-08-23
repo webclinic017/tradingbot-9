@@ -36,14 +36,14 @@ def main(assHand=None):
         trade_executions_file.write("Stock, Type, Time, Stoploss, Entry Price, R, Target Price, Prediction Type")
         trade_executions_file.write("\n")
         trade_executions_file.flush()
-
+    Dict={}
     while True:
         stocks = benzingaScreener.get_gainers_for_session();
         bullFlatPattern = BullFlagPattern();
         transaction = Transaction(0, 0);
         for stock in stocks:
             # print("Working on stock", stock)
-            bullFlagInformation = bullFlatPattern.checkType2BullFlagPattern(stock, bull_flag_2_alert_file,
+            bullFlagInformation = bullFlatPattern.checkType2BullFlagPattern(stock, bull_flag_2_alert_file,Dict,
                                                                             interval='5Min', limit=limit)
             if (realtime == 0):
                 bull_flag_verifier = BullFlagVerifier()

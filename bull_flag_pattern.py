@@ -3,7 +3,7 @@ from traderlib import *
 
 class BullFlagPattern:
 
-    def checkType1BullFlagPattern(self, stock, bull_flag_1_alert_file, interval, limit):
+    def checkType1BullFlagPattern(self, stock, bull_flag_1_alert_file, Dict, interval, limit):
 
         api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
 
@@ -31,10 +31,17 @@ class BullFlagPattern:
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
-                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
-                            bull_flag_1_alert_file.write(log)
-                            bull_flag_1_alert_file.write("\n")
-                            bull_flag_1_alert_file.flush()
+                            key = stock+":"+str(time.tz_convert('utc'))
+                            if key not in Dict:
+                                log = stock + ", " + "BullFlag1, " + str(time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['low'])
+                                Dict[key] = log
+                                bull_flag_1_alert_file.write(log)
+                                bull_flag_1_alert_file.write("\n")
+                                bull_flag_1_alert_file.flush()
+                            else:
+                                print("Key already present")
+
                             print()
                             returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
                             downflag = 0
@@ -64,10 +71,16 @@ class BullFlagPattern:
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
-                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
-                            bull_flag_1_alert_file.write(log)
-                            bull_flag_1_alert_file.write("\n")
-                            bull_flag_1_alert_file.flush()
+                            key = stock+":"+str(time.tz_convert('utc'))
+                            if key not in Dict:
+                                log = stock + ", " + "BullFlag1, " + str(time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['low'])
+                                Dict[key] = log
+                                bull_flag_1_alert_file.write(log)
+                                bull_flag_1_alert_file.write("\n")
+                                bull_flag_1_alert_file.flush()
+                            else:
+                                print("Key already present")
                             print()
                             returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
                         downflag = 0
@@ -86,7 +99,7 @@ class BullFlagPattern:
         return returnObject
 
 
-    def checkType2BullFlagPattern(self, stock, bull_flag_2_alert_file, interval='5Min', limit=100):
+    def checkType2BullFlagPattern(self, stock, bull_flag_2_alert_file, Dict, interval='5Min', limit=100):
 
         api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
 
@@ -115,12 +128,17 @@ class BullFlagPattern:
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
+                            key = stock+":"+str(time.tz_convert('utc'))
+                            if key not in Dict:
+                                log = stock + ", " + "BullFlag2, " + str(time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['low'])
+                                Dict[key] = log
+                                bull_flag_2_alert_file.write(log)
+                                bull_flag_2_alert_file.write("\n")
+                                bull_flag_2_alert_file.flush()
+                            else:
+                                print("Key already present")
                             returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
-                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
-                            bull_flag_2_alert_file.write(log)
-                            bull_flag_2_alert_file.write("\n")
-                            bull_flag_2_alert_file.flush()
-
                             print()
                             downflag = 0
                             upflag = 0
@@ -155,12 +173,17 @@ class BullFlagPattern:
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
+                            key = stock+":"+str(time.tz_convert('utc'))
+                            if key not in Dict:
+                                log = stock + ", " + "BullFlag2, " + str(time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['low'])
+                                Dict[key] = log
+                                bull_flag_2_alert_file.write(log)
+                                bull_flag_2_alert_file.write("\n")
+                                bull_flag_2_alert_file.flush()
+                            else:
+                                print("Key already present")
                             returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
-                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
-                            bull_flag_2_alert_file.write(log)
-                            bull_flag_2_alert_file.write("\n")
-                            bull_flag_2_alert_file.flush()
-
                             print()
                         downflag = 0
                         upflag = 0
