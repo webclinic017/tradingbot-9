@@ -15,8 +15,8 @@ class FinvizScreener:
         #print(df.head())
         return stock_list;
 
-    def midcap_with_beta_over_1point5(self):
-        filters = ['cap_midover', 'sh_avgvol_o1000','ta_beta_o1.5']  # Shows companies in NASDAQ which are in the S&P500
+    def positive_movers_with_beta_over_2(self):
+        filters = ['ta_changeopen_u1', 'sh_avgvol_o1000','ta_beta_o2']  # Shows companies in NASDAQ which are in the S&P500
         stock_list = Screener(filters=filters, table='Performance', order='-volume')  # Get the performance table and sort it by price ascending
         # Export the screener results to .csv
         #stock_list.to_csv("stock.csv")

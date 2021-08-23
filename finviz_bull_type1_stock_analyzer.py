@@ -31,7 +31,7 @@ def main():
         target_achieved_alert_file.write("\n")
 
     while True:
-        stocks = finvizScreener.midcap_with_beta_over_1point5();
+        stocks = finvizScreener.positive_movers_with_beta_over_2();
         bullFlatPattern = BullFlagPattern();
         transaction = Transaction(0,0);
         for stock in stocks:

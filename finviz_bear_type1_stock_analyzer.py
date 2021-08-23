@@ -5,7 +5,7 @@ from finviz_screener import FinvizScreener
 def main():
     finvizScreener = FinvizScreener();
     while True:
-        stocks = finvizScreener.midcap_with_beta_over_1point5();
+        stocks = finvizScreener.positive_movers_with_beta_over_2();
         bearFlagPattern = BearFlagPattern();
         for stock in stocks:
             #print("Working on stock", stock)

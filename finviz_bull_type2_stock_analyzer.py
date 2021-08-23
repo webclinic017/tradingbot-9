@@ -7,7 +7,7 @@ import os
 from datetime import date
 def main():
     finvizScreener = FinvizScreener();
-    realtime=0
+    realtime=1
     limit=10
     if(realtime == 0):
         limit=78
@@ -30,7 +30,7 @@ def main():
         target_achieved_alert_file.write("\n")
 
     while True:
-        stocks = finvizScreener.midcap_with_beta_over_1point5();
+        stocks = finvizScreener.positive_movers_with_beta_over_2();
         bullFlatPattern = BullFlagPattern();
         transaction = Transaction(0,0);
         for stock in stocks:
