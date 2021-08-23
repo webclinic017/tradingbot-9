@@ -3,7 +3,7 @@ from traderlib import *
 
 class BullFlagPattern:
 
-    def checkType1BullFlagPattern(self, stock, interval='5Min', limit=100):
+    def checkType1BullFlagPattern(self, stock, bull_flag_1_alert_file, interval, limit):
 
         api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
 
@@ -16,6 +16,8 @@ class BullFlagPattern:
             upflag = 0;
             downflag = 0;
             firstBull=0;
+            returnObject = []
+            counter=0
             for time, currentCandle in bar_iter.iterrows():
                 if (count == 0):
                     prev = currentCandle
@@ -29,7 +31,12 @@ class BullFlagPattern:
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
+                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
+                            bull_flag_1_alert_file.write(log)
+                            bull_flag_1_alert_file.write("\n")
+                            bull_flag_1_alert_file.flush()
                             print()
+                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
                             downflag = 0
                             upflag = 0
                             bull = 0
@@ -56,8 +63,13 @@ class BullFlagPattern:
                             print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
-                            print("Stock", stock, "Stoploss", prev[stock]['close'])
+                            print("Stock", stock, "Stoploss", prev[stock]['low'])
+                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
+                            bull_flag_1_alert_file.write(log)
+                            bull_flag_1_alert_file.write("\n")
+                            bull_flag_1_alert_file.flush()
                             print()
+                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
                         downflag = 0
                         upflag = 0
                         bull = 0
@@ -68,11 +80,13 @@ class BullFlagPattern:
                         bull = 0
                         bear = 0
                     prev = currentCandle;
-
+                    counter = counter+1
         except Exception as e:
             print(e)
+        return returnObject
 
-    def checkType2BullFlagPattern(self, stock, interval='5Min', limit=100):
+
+    def checkType2BullFlagPattern(self, stock, bull_flag_2_alert_file, interval='5Min', limit=100):
 
         api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
 
@@ -86,7 +100,9 @@ class BullFlagPattern:
             downflag = 0;
             firstBull=0;
             maxClose=0
-            for i, j in bar_iter.iterrows():
+            returnObject = []
+            counter=0
+            for time, j in bar_iter.iterrows():
                 if (count == 0):
                     prev = j
                     count = count + 1
@@ -95,9 +111,16 @@ class BullFlagPattern:
                     if bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, j) == 1:
                         if upflag == 1 and downflag == 1 and maxClose < j[stock]['close']:
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", i)
+                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
-                            print("Stock", stock, "Bull flag detected at time", i, i.tz_convert('utc'))
+                            print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
+                            print("Stock", stock, "Stoploss", prev[stock]['low'])
+                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
+                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
+                            bull_flag_2_alert_file.write(log)
+                            bull_flag_2_alert_file.write("\n")
+                            bull_flag_2_alert_file.flush()
+
                             print()
                             downflag = 0
                             upflag = 0
@@ -128,9 +151,16 @@ class BullFlagPattern:
                     elif bullOrBearCandle == 'green':
                         if upflag == 1 and downflag == 1 and maxClose < j[stock]['close']:
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", i)
+                            print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
-                            print("Stock", stock, "Bull flag dected at time", i, i.tz_convert('utc'))
+                            print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
+                            print("Stock", stock, "Stoploss", prev[stock]['low'])
+                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], bar_iter, stock, limit, time))
+                            log = stock + ", " + "BullFlag1, " +str(time.tz_convert('utc')) + ", " + str(prev[stock]['low'])
+                            bull_flag_2_alert_file.write(log)
+                            bull_flag_2_alert_file.write("\n")
+                            bull_flag_2_alert_file.flush()
+
                             print()
                         downflag = 0
                         upflag = 0
@@ -146,9 +176,10 @@ class BullFlagPattern:
                         maxClose = 0
 
                     prev = j;
-
+                    counter = counter + 1
         except Exception as e:
             print(e)
+        return returnObject
 
 
     def candleType(self, stock, candle):
@@ -193,3 +224,14 @@ class BullFlagPattern:
                 return 1;
             else:
                 return 0;
+
+
+class EntryCandleInformation:
+    def __init__(self, postion, stoploss, barset, stock, total, time):
+        self.stock = stock
+        self.postion = postion
+        self.stoploss = stoploss
+        self.barset = barset
+        self.total = total;
+        self.time = time;
+

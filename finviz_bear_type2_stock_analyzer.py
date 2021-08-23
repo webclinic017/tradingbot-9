@@ -2,7 +2,7 @@ import time
 from bear_flag_pattern import BearFlagPattern
 from finviz_screener import FinvizScreener
 
-def main(assHand=None):
+def main():
     finvizScreener = FinvizScreener();
     while True:
         stocks = finvizScreener.midcap_with_beta_over_1point5();
