@@ -1,19 +1,9 @@
-from backtrader import TimeFrame
-
-import gvars
-from assetHandler import AssetHandler
-from other_functions import create_log_folder
-from tbot import MultiHandler, check_account_ok, _L, run_tbot
-from traderlib import *
-import threading, os, logging, sys
-import tulipy as ti
-import pandas as pd
 
 import time
 from bull_flag_pattern import BullFlagPattern
 from benzinga_screener import BenzingaScreener
 
-def main(assHand=None):
+def main():
     benzingaScreener = BenzingaScreener();
     while True:
         stocks = benzingaScreener.get_gainers();
