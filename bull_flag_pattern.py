@@ -1,11 +1,11 @@
-
+import secrets
 from traderlib import *
 
 class BullFlagPattern:
 
     def checkType1BullFlagPattern(self, stock, bull_flag_1_alert_file, Dict, interval, limit):
 
-        api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
+        api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
 
         try:  # fetch the data
             bar_iter = api.get_barset(stock, interval, limit).df
@@ -101,7 +101,7 @@ class BullFlagPattern:
 
     def checkType2BullFlagPattern(self, stock, bull_flag_2_alert_file, Dict, interval='5Min', limit=100):
 
-        api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
+        api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
 
         try:  # fetch the data
             bar_iter = api.get_barset(stock, interval, limit).df

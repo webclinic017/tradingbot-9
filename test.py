@@ -1,6 +1,7 @@
 from backtrader import TimeFrame
 
 import gvars
+import secrets
 from assetHandler import AssetHandler
 from other_functions import create_log_folder
 from tbot import MultiHandler, check_account_ok, _L, run_tbot
@@ -26,7 +27,7 @@ def main(assHand=None):
     logging.getLogger().addHandler(multi_handler)
 
     # initialize the API with Alpaca
-    api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
+    api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
 
     # get the Alpaca account ready
     try:
@@ -52,7 +53,7 @@ def load_historical_data(stock,interval='1Min',limit=100):
         # it is important to check whether is updated or not
 
         timedeltaItv = ceil(int(interval.strip('Min')) * 1.5) # 150% de l'interval, per si de cas
-        api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
+        api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
 
         try: # fetch the data
             #api.get_bars("AAPL", TimeFrame.Hour, "2021-02-08", "2021-02-08", limit=10, adjustment='raw').df

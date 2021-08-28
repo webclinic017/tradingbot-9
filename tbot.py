@@ -2,7 +2,7 @@
 
 # This code is free, THANK YOU!
 # It is explained at the guide you can find at www.theincompleteguide.com
-
+import secrets
 from stocklib import *
 from traderlib import *
 from other_functions import *
@@ -82,7 +82,7 @@ def check_account_ok(api):
 def run_tbot(_L,assHand,account):
 
     # initialize trader object
-    trader = Trader(gvars.API_KEY, gvars.API_SECRET_KEY, _L, account)
+    trader = Trader(secrets.API_KEY, secrets.API_SECRET_KEY, _L, account)
 
     while True:
 
@@ -116,7 +116,7 @@ def main():
     _L.info('Max workers allowed: ' + str(gvars.MAX_WORKERS))
 
     # initialize the API with Alpaca
-    api = tradeapi.REST(gvars.API_KEY, gvars.API_SECRET_KEY, gvars.ALPACA_API_URL, api_version='v2')
+    api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
 
     # initialize the asset handler
     assHand = AssetHandler()
