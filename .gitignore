@@ -26,3 +26,4 @@ ajcore*.txt
 .DS_Store
 *.swp
 *.pyc
+env/
