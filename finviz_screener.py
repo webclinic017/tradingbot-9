@@ -5,7 +5,7 @@ import pandas as pd
 
 class FinvizScreener:
     def midcap_with_beta_over_1(self):
-        filters = ['cap_midover', 'fa_epsyoy_o20','fa_epsyoy1_o20','ta_beta_o1']  # Shows companies in NASDAQ which are in the S&P500
+        filters = ['cap_midover', 'fa_epsyoy_o20','fa_epsyoy1_o20','ta_beta_o2']  # Shows companies in NASDAQ which are in the S&P500
         stock_list = Screener(filters=filters, table='Performance', order='-volume')  # Get the performance table and sort it by price ascending
         # Export the screener results to .csv
         #stock_list.to_csv("stock.csv")
@@ -16,8 +16,8 @@ class FinvizScreener:
         return stock_list;
 
     def positive_movers_with_beta_over_2(self):
-        filters = ['ta_changeopen_u1', 'sh_avgvol_o1000','ta_beta_o2']  # Shows companies in NASDAQ which are in the S&P500
-        stock_list = Screener(filters=filters, table='Performance', order='-volume')  # Get the performance table and sort it by price ascending
+        filters = ['ta_changeopen_u1', 'sh_avgvol_o1000','ta_beta_2']  # Shows companies in NASDAQ which are in the S&P500
+        stock_list = Screener(filters=filters, table='Overview', order='-volume')  # Get the performance table and sort it by price ascending
         # Export the screener results to .csv
         #stock_list.to_csv("stock.csv")
         #print(stock_list)
@@ -41,6 +41,6 @@ class FinvizScreener:
 
 def main():
     finvizScreener = FinvizScreener()
-    print(finvizScreener.midcap_with_beta_over_1point5())
+    print(finvizScreener.positive_movers_with_beta_over_2())
 if __name__ == '__main__':
     main()
