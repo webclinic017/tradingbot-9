@@ -1,12 +1,10 @@
-import secrets
+from datetime import date
 
-import time
-from bull_flag_pattern import BullFlagPattern
+import secrets
 from benzinga_screener import BenzingaScreener
+from bull_flag_pattern import BullFlagPattern
 from bull_flag_verifier import BullFlagVerifier
 from bull_flag_verifier import Transaction
-import os
-from datetime import date
 from traderlib import *
 
 
@@ -46,10 +44,10 @@ def main():
             candle_infos = api.get_barset(stock, interval, limit).df
             # Apply Bull flag 1 pattern match. If found, enter the values to benzinga_stock_alert_file
             bull_flag1 = bull_flat_pattern.checkType1BullFlagPattern(stock, candle_infos, benzinga_stock_alert_file,
-                                                                   stock_info, limit)
+                                                                     stock_info, limit)
             # Apply Bull flag 2 pattern match. If found, enter the values to benzinga_stock_alert_file
             bull_flag2 = bull_flat_pattern.checkType2BullFlagPattern(stock, candle_infos, benzinga_stock_alert_file,
-                                                                   stock_info, limit)
+                                                                     stock_info, limit)
 
             if realtime == 0:
                 bull_flag_verifier = BullFlagVerifier()
