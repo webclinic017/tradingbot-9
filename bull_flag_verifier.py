@@ -1,20 +1,19 @@
-
 class BullFlagVerifier:
 
-    def verifyBullFlag(self, entryCandleInformations, transaction):
-        for entryCandleInformation in entryCandleInformations:
+    def verifyBullFlag(self, entry_candle_infos, transaction):
+        for entry_candle_info in entry_candle_infos:
             try:
-                barset = entryCandleInformation.barset;
-                position = entryCandleInformation.postion;
-                stoploss = entryCandleInformation.stoploss;
-                stock = entryCandleInformation.stock
-                time = entryCandleInformation.time;
-                #print(barset.iloc[position + 2]);
-                entry = barset.iloc[position + 2][entryCandleInformation.stock]['open'];
-                r = barset.iloc[position + 2][entryCandleInformation.stock]['open'] - stoploss;
-                first_target = entry + 2*r;
-                print("Stock", stock,"Entry", entry, "first_target", first_target, "time",time, "timeUTC", time.tz_convert('utc') )
-                subset = barset.tail(entryCandleInformation.total - position-3);
+                barset = entry_candle_info.barset;
+                position = entry_candle_info.postion;
+                stoploss = entry_candle_info.stoploss;
+                stock = entry_candle_info.stock
+                time = entry_candle_info.time;
+                entry = barset.iloc[position + 2][entry_candle_info.stock]['open'];
+                r = barset.iloc[position + 2][entry_candle_info.stock]['open'] - stoploss;
+                first_target = entry + 2 * r;
+                print("Stock", stock, "Entry", entry, "first_target", first_target, "time", time, "timeUTC",
+                      time.tz_convert('utc'))
+                subset = barset.tail(entry_candle_info.total - position - 3);
                 for time, currentCandle in subset.iterrows():
                     if currentCandle[stock]['high'] > first_target:
                         money_made = (first_target - entry)
@@ -34,7 +33,9 @@ class Transaction:
     def __init__(self, totalMoneyMade, totalMoneyLost):
         self.totalMoneyMade = totalMoneyMade
         self.totalMoneyLost = totalMoneyLost
+
     def add(self, money):
         self.totalMoneyMade = self.totalMoneyMade + money
+
     def deduct(self, money):
         self.totalMoneyLost = self.totalMoneyLost + money
