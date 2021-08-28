@@ -1,5 +1,4 @@
 import secrets
-from traderlib import *
 
 import time
 from bull_flag_pattern import BullFlagPattern
