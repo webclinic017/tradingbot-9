@@ -20,9 +20,6 @@ API_SECRET_KEY = ""
 ALPACA_API_URL = "https://paper-api.alpaca.markets"
 #### FILL THESE VALUES ###########################
 
-if API_KEY == "" or API_SECRET_KEY == "":
-    print('\n\n #### Please get an API key at the Alpaca website! #### \n\n')
-    raise ValueError
 
 ################################################################ ATTEMPTS ->
 # max iteration attempts

@@ -1,4 +1,3 @@
-import json
 
 from finviz.screener import Screener
 import pandas as pd

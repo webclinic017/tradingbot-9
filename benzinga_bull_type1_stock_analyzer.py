@@ -1,13 +1,5 @@
-from backtrader import TimeFrame
 
-import gvars
-from assetHandler import AssetHandler
-from other_functions import create_log_folder
-from tbot import MultiHandler, check_account_ok, _L, run_tbot
 from traderlib import *
-import threading, os, logging, sys
-import tulipy as ti
-import pandas as pd
 
 import time
 from bull_flag_pattern import BullFlagPattern
@@ -17,7 +9,7 @@ from bull_flag_verifier import Transaction
 import os
 from datetime import date
 
-def main(assHand=None):
+def main():
     benzingaScreener = BenzingaScreener();
     realtime = 1
     limit = 10
