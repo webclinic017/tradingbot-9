@@ -16,7 +16,7 @@ def main():
     if realtime == 0:
         limit = 78
 
-    stock_alert_filename = "predictions/benzinga/" + "stock_alert_bull_type_1_" + str(date.today()) + ".csv"
+    stock_alert_filename = "predictions/benzinga/" + "stock_alert_bull_" + str(date.today()) + ".csv"
     trade_executions_filename = "predictions/trade_executions_" + str(date.today()) + ".csv"
     benzinga_stock_alert_file = open(stock_alert_filename, "a+")
     trade_executions_file = open(trade_executions_filename, "a+")
