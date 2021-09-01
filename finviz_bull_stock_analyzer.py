@@ -31,9 +31,8 @@ def main():
         trade_executions_file.flush()
 
     api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
-    stock_info = {}
 
-    Dict = {}
+    stock_info = {}
     while True:
         stocks = finvizScreener.positive_movers_with_beta_over_2();
         bull_flat_pattern = BullFlagPattern();
@@ -43,6 +42,9 @@ def main():
             # print("Working on stock", stock)
             # Fetch the recent candle information for the given stock
             candle_infos = api.get_barset(stock, interval, limit).df
+            if realtime == 1:
+                candle_infos = candle_infos[0:-1]
+                limit = limit-1
             # Apply Bull flag 1 pattern match. If found, enter the values to benzinga_stock_alert_file
             bull_flag1 = bull_flat_pattern.checkType1BullFlagPattern(stock, candle_infos, finviz_flag_1_alert_file,
                                                                      stock_info, limit)
