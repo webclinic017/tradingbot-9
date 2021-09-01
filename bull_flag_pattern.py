@@ -1,6 +1,7 @@
 import secrets
 from traderlib import *
 
+
 class BullFlagPattern:
 
     def checkType1BullFlagPattern(self, stock, barset, stock_alert_file, stock_info, limit):
@@ -12,25 +13,26 @@ class BullFlagPattern:
             count = 0;
             upflag = 0;
             downflag = 0;
-            firstBull=0;
-            returnObject = []
-            counter=0
-            for time, currentCandle in barset.iterrows():
+            first_bull = 0;
+            return_object = []
+            counter = 0
+            for time, current_candle in barset.iterrows():
                 if count == 0:
-                    prev = currentCandle
+                    prev = current_candle
                     count = count + 1
                 else:
-                    bullOrBearCandle = self.candleType(stock, currentCandle);
-                    if bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, currentCandle) == 1:
-                        if upflag == 1 and downflag == 1 and firstBull < currentCandle[stock]['close'] :
+                    bull_or_bear_candle = self.candleType(stock, current_candle);
+                    if bull_or_bear_candle == 'green' and self.isHigherThan(stock, prev, current_candle) == 1:
+                        if upflag == 1 and downflag == 1 and first_bull < current_candle[stock]['close']:
                             # This is the sign of bull flag.
                             print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
-                            stock_name = stock+":"+str(time.tz_convert('utc'))
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
                             if stock_name not in stock_info:
-                                current_stock_info = stock + ", " + "BullFlag1, " + str(time.tz_convert('utc')) + ", " + str(
+                                current_stock_info = stock + ", " + "BullFlag1, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
                                     prev[stock]['low'])
                                 stock_info[stock_name] = current_stock_info
                                 stock_alert_file.write(current_stock_info)
@@ -40,7 +42,8 @@ class BullFlagPattern:
                                 print("Key already present")
 
                             print()
-                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
                             downflag = 0
                             upflag = 0
                             bull = 0
@@ -51,24 +54,26 @@ class BullFlagPattern:
                             bull = 0
                             bear = 0
                         if bull == 0:
-                            firstBull = currentCandle[stock]['close'];
+                            first_bull = current_candle[stock]['close'];
                         bull = bull + 1
                         if (bull >= 2):
                             upflag = 1;
-                    elif bullOrBearCandle == 'red' and self.isLowerThan(stock, prev, currentCandle) == 1 and upflag == 1:
+                    elif bull_or_bear_candle == 'red' and self.isLowerThan(stock, prev,
+                                                                        current_candle) == 1 and upflag == 1:
                         bear = bear + 1
                         if (bear >= 2):
                             downflag = 1;
-                    elif bullOrBearCandle == 'green':
-                        if upflag == 1 and downflag == 1 and firstBull < currentCandle[stock]['close'] :
+                    elif bull_or_bear_candle == 'green':
+                        if upflag == 1 and downflag == 1 and first_bull < current_candle[stock]['close']:
                             # This is the sign of bull flag.
                             print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
-                            stock_name = stock+":"+str(time.tz_convert('utc'))
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
                             if stock_name not in stock_info:
-                                current_stock_info = stock + ", " + "BullFlag1, " + str(time.tz_convert('utc')) + ", " + str(
+                                current_stock_info = stock + ", " + "BullFlag1, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
                                     prev[stock]['low'])
                                 stock_info[stock_name] = current_stock_info
                                 stock_alert_file.write(current_stock_info)
@@ -77,22 +82,22 @@ class BullFlagPattern:
                             else:
                                 print("Key already present")
                             print()
-                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                    elif bullOrBearCandle == 'red':
+                    elif bull_or_bear_candle == 'red':
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                    prev = currentCandle;
-                    counter = counter+1
+                    prev = current_candle;
+                    counter = counter + 1
         except Exception as e:
             print(e)
-        return returnObject
-
+        return return_object
 
     def checkType2BullFlagPattern(self, stock, barset, stock_alert_file, stock_info, limit):
         try:  # fetch the data
@@ -102,26 +107,26 @@ class BullFlagPattern:
             count = 0;
             upflag = 0;
             downflag = 0;
-            firstBull=0;
-            maxClose=0
-            returnObject = []
-            counter=0
-            for time, j in barset.iterrows():
-                if (count == 0):
-                    prev = j
+            max_close = 0
+            return_object = []
+            counter = 0
+            for time, current_candle in barset.iterrows():
+                if count == 0:
+                    prev = current_candle
                     count = count + 1
                 else:
-                    bullOrBearCandle = self.candleType(stock, j);
-                    if bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, j) == 1:
-                        if upflag == 1 and downflag == 1 and maxClose < j[stock]['close']:
+                    bull_or_bear_candle = self.candleType(stock, current_candle);
+                    if bull_or_bear_candle == 'green' and self.isHigherThan(stock, prev, current_candle) == 1:
+                        if upflag == 1 and downflag == 1 and max_close < current_candle[stock]['close']:
                             # This is the sign of bull flag.
                             print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
-                            stock_name = stock+":"+str(time.tz_convert('utc'))
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
                             if stock_name not in stock_info:
-                                current_stock_info = stock + ", " + "BullFlag2, " + str(time.tz_convert('utc')) + ", " + str(
+                                current_stock_info = stock + ", " + "BullFlag2, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
                                     prev[stock]['low'])
                                 stock_info[stock_name] = current_stock_info
                                 stock_alert_file.write(current_stock_info)
@@ -129,44 +134,45 @@ class BullFlagPattern:
                                 stock_alert_file.flush()
                             else:
                                 print("Key already present")
-                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
                             print()
                             downflag = 0
                             upflag = 0
                             bull = 0
                             bear = 0
-                            maxClose = 0
+                            max_close = 0
                         elif downflag == 1:
                             downflag = 0
                             upflag = 0
                             bull = 0
                             bear = 0
-                            maxClose = 0
+                            max_close = 0
                         if bull == 0:
-                            firstBull = j[stock]['close'];
-                            maxClose = j[stock]['close'];
+                            max_close = current_candle[stock]['close'];
                         bull = bull + 1
-                        if (bull >= 2):
+                        if bull >= 2:
                             upflag = 1;
-                            maxClose = j[stock]['close'];
+                            max_close = current_candle[stock]['close'];
 
-                    elif bullOrBearCandle == 'red' and self.isLowerThan(stock, prev, j) == 1 and upflag == 1:
+                    elif bull_or_bear_candle == 'red' and self.isLowerThan(stock, prev, current_candle) == 1 and upflag == 1:
                         bear = bear + 1
-                        downflag=1;
+                        downflag = 1;
                         if (bear >= 2):
                             downflag = 0;
-                            maxClose = 0
+                            max_close = 0
 
-                    elif bullOrBearCandle == 'green':
-                        if upflag == 1 and downflag == 1 and maxClose < j[stock]['close']:
+                    elif bull_or_bear_candle == 'green':
+                        if upflag == 1 and downflag == 1 and max_close < current_candle[stock]['close']:
                             # This is the sign of bull flag.
                             print("Stock", stock, "Bull=", bull, " Upflag = ", upflag, "time", time)
                             print("Stock", stock, "Bear=", bear, " Downflag = ", downflag)
                             print("Stock", stock, "Bull flag dected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['low'])
-                            stock_name = stock+":"+str(time.tz_convert('utc'))
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
                             if stock_name not in stock_info:
-                                current_stock_info = stock + ", " + "BullFlag2, " + str(time.tz_convert('utc')) + ", " + str(
+                                current_stock_info = stock + ", " + "BullFlag2, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
                                     prev[stock]['low'])
                                 stock_info[stock_name] = current_stock_info
                                 stock_alert_file.write(current_stock_info)
@@ -174,27 +180,27 @@ class BullFlagPattern:
                                 stock_alert_file.flush()
                             else:
                                 print("Key already present")
-                            returnObject.append(EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['low'], barset, stock, limit, time))
                             print()
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                        maxClose = 0
+                        max_close = 0
 
-                    elif bullOrBearCandle == 'red':
+                    elif bull_or_bear_candle == 'red':
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                        maxClose = 0
+                        max_close = 0
 
-                    prev = j;
+                    prev = current_candle;
                     counter = counter + 1
         except Exception as e:
             print(e)
-        return returnObject
-
+        return return_object
 
     def candleType(self, stock, candle):
         open = candle[stock]['open'];
@@ -248,4 +254,3 @@ class EntryCandleInformation:
         self.barset = barset
         self.total = total;
         self.time = time;
-
