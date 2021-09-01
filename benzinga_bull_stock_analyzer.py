@@ -44,7 +44,7 @@ def main():
             candle_infos = api.get_barset(stock, interval, limit).df
             if realtime == 1:
                 candle_infos = candle_infos[0:-1]
-                limit = limit-1
+                
             # Apply Bull flag 1 pattern match. If found, enter the values to benzinga_stock_alert_file
             bull_flag1 = bull_flat_pattern.checkType1BullFlagPattern(stock, candle_infos, benzinga_stock_alert_file,
                                                                      stock_info, limit)
