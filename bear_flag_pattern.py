@@ -1,35 +1,47 @@
-import secrets
-from traderlib import *
+from bull_flag_pattern import EntryCandleInformation
+
 
 class BearFlagPattern:
 
-    def checkType1BearFlagPattern(self, stock, interval='5Min', limit=100):
-
-        api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
+    def checkType1BearFlagPattern(self, stock, barset, stock_alert_file, stock_info, limit):
 
         try:  # fetch the data
-            bar_iter = api.get_barset(stock, interval, limit).df
             prev = None;
             bull = 0;
             bear = 0;
             count = 0;
             upflag = 0;
             downflag = 0;
-            firstBear=0;
-            for timeStamp, currentCandle in bar_iter.iterrows():
-                if (count == 0):
-                    prev = currentCandle
+            first_bear = 0;
+            return_object = []
+            counter = 0
+            for time, current_candle in barset.iterrows():
+                if count == 0:
+                    prev = current_candle
                     count = count + 1
                 else:
-                    bullOrBearCandle = self.candleType(stock, currentCandle);
-                    if bullOrBearCandle == 'red' and self.isLowerThan(stock, prev, currentCandle) == 1:
-                        if upflag == 1 and downflag == 1 and firstBear > currentCandle[stock]['close'] :
+                    bull_or_bear_candle = self.candleType(stock, current_candle);
+                    if bull_or_bear_candle == 'red' and self.isLowerThan(stock, prev, current_candle) == 1:
+                        if upflag == 1 and downflag == 1 and first_bear > current_candle[stock]['close']:
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", timeStamp)
+                            print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", time)
                             print("Stock", stock, "Bull=", bear, " Upflag = ", upflag)
-                            print("Stock", stock, "Bear flag detected at time", timeStamp, timeStamp.tz_convert('utc'))
+                            print("Stock", stock, "Bear flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['high'])
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
+                            if stock_name not in stock_info:
+                                current_stock_info = stock + ", " + "BearFlag1, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['high'])
+                                stock_info[stock_name] = current_stock_info
+                                stock_alert_file.write(current_stock_info)
+                                stock_alert_file.write("\n")
+                                stock_alert_file.flush()
+                            else:
+                                print("Key already present")
                             print()
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['high'], barset, stock, limit, time))
                             downflag = 0
                             upflag = 0
                             bull = 0
@@ -40,117 +52,156 @@ class BearFlagPattern:
                             bull = 0
                             bear = 0
                         if bear == 0:
-                            firstBear = currentCandle[stock]['close'];
-                            #ema10 = ti.ema(stock.df.close.dropna().to_numpy(), 10)
-
+                            first_bear = current_candle[stock]['close'];
                         bear = bear + 1
                         if (bear >= 2):
                             downflag = 1;
-                    elif bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, currentCandle) == 1 and downflag == 1:
+                    elif bull_or_bear_candle == 'green' and self.isHigherThan(stock, prev,
+                                                                              current_candle) == 1 and downflag == 1:
                         bull = bull + 1
                         if (bull >= 2):
                             upflag = 1;
-                    elif bullOrBearCandle == 'red':
-                        if upflag == 1 and downflag == 1 and firstBear > currentCandle[stock]['close'] :
+                    elif bull_or_bear_candle == 'red':
+                        if upflag == 1 and downflag == 1 and first_bear > current_candle[stock]['close']:
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", timeStamp)
+                            print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", time)
                             print("Stock", stock, "Bull=", bear, " Upflag = ", upflag)
-                            print("Stock", stock, "Bear flag detected at time", timeStamp, timeStamp.tz_convert('utc'))
+                            print("Stock", stock, "Bear flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['high'])
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
+                            if stock_name not in stock_info:
+                                current_stock_info = stock + ", " + "BearFlag1, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['high'])
+                                stock_info[stock_name] = current_stock_info
+                                stock_alert_file.write(current_stock_info)
+                                stock_alert_file.write("\n")
+                                stock_alert_file.flush()
+                            else:
+                                print("Key already present")
                             print()
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['high'], barset, stock, limit, time))
+
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                    elif bullOrBearCandle == 'green':
+                    elif bull_or_bear_candle == 'green':
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                    prev = currentCandle;
+                    prev = current_candle;
+                    counter = counter + 1
 
         except Exception as e:
             print(e)
+        return return_object
 
-    def checkType2BearFlagPattern(self, stock, interval='5Min', limit=100):
-
-        api = tradeapi.REST(secrets.API_KEY, secrets.API_SECRET_KEY, secrets.ALPACA_API_URL, api_version='v2')
-
+    def checkType2BearFlagPattern(self, stock, barset, stock_alert_file, stock_info, limit):
         try:  # fetch the data
-            bar_iter = api.get_barset(stock, interval, limit).df
             prev = None;
             bull = 0;
             bear = 0;
             count = 0;
             upflag = 0;
             downflag = 0;
-            firstBear=0;
-            maxClose=0
-            for timeStamp, currentCandle in bar_iter.iterrows():
-                if (count == 0):
-                    prev = currentCandle
+            max_close = 0
+            return_object = []
+            counter = 0
+            for time, current_candle in barset.iterrows():
+                if count == 0:
+                    prev = current_candle
                     count = count + 1
                 else:
-                    bullOrBearCandle = self.candleType(stock, currentCandle);
-                    if bullOrBearCandle == 'red' and self.isLowerThan(stock, prev, currentCandle) == 1:
-                        if upflag == 1 and downflag == 1 and maxClose > currentCandle[stock]['close']:
+                    bull_or_bear_candle = self.candleType(stock, current_candle);
+                    if bull_or_bear_candle == 'red' and self.isLowerThan(stock, prev, current_candle) == 1:
+                        if upflag == 1 and downflag == 1 and max_close > current_candle[stock]['close']:
                             # This is the sign of bull flag.
-                            print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", timeStamp)
+                            print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", time)
                             print("Stock", stock, "Bull=", bear, " Upflag = ", upflag)
-                            print("Stock", stock, "Bear flag detected at time", timeStamp, timeStamp.tz_convert('utc'))
+                            print("Stock", stock, "Bear flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['high'])
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
+                            if stock_name not in stock_info:
+                                current_stock_info = stock + ", " + "BearFlag2, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['high'])
+                                stock_info[stock_name] = current_stock_info
+                                stock_alert_file.write(current_stock_info)
+                                stock_alert_file.write("\n")
+                                stock_alert_file.flush()
+                            else:
+                                print("Key already present")
+                            return_object.append(
+                                    EntryCandleInformation(counter, prev[stock]['high'], barset, stock, limit, time))
                             print()
                             downflag = 0
                             upflag = 0
                             bull = 0
                             bear = 0
-                            maxClose = 0
+                            max_close = 0
                         elif upflag == 1:
                             downflag = 0
                             upflag = 0
                             bull = 0
                             bear = 0
-                            maxClose = 0
+                            max_close = 0
                         if bear == 0:
-                            firstBear = currentCandle[stock]['close'];
-                            maxClose = currentCandle[stock]['close'];
+                            max_close = current_candle[stock]['close'];
                         bear = bear + 1
                         if (bear >= 2):
                             downflag = 1;
-                            maxClose = currentCandle[stock]['close'];
+                            max_close = current_candle[stock]['close'];
 
-                    elif bullOrBearCandle == 'green' and self.isHigherThan(stock, prev, currentCandle) == 1 and downflag == 1:
+                    elif bull_or_bear_candle == 'green' and self.isHigherThan(stock, prev,
+                                                                           current_candle) == 1 and downflag == 1:
                         bull = bull + 1
-                        upflag=1;
+                        upflag = 1;
                         if (bull >= 2):
                             upflag = 0;
-                            maxClose = 0
+                            max_close = 0
 
-                    elif bullOrBearCandle == 'red':
-                        if upflag == 1 and downflag == 1 and maxClose > currentCandle[stock]['close']:
+                    elif bull_or_bear_candle == 'red':
+                        if upflag == 1 and downflag == 1 and max_close > current_candle[stock]['close']:
                             print("Stock", stock, "Bear=", bull, " Downflag = ", downflag, "time", time)
                             print("Stock", stock, "Bull=", bear, " Upflag = ", upflag)
-                            print("Stock", stock, "Bear flag detected at time", timeStamp, timeStamp.tz_convert('utc'))
+                            print("Stock", stock, "Bear flag detected at time", time, time.tz_convert('utc'))
                             print("Stock", stock, "Stoploss", prev[stock]['high'])
+                            stock_name = stock + ":" + str(time.tz_convert('utc'))
+                            if stock_name not in stock_info:
+                                current_stock_info = stock + ", " + "BearFlag2, " + str(
+                                    time.tz_convert('utc')) + ", " + str(
+                                    prev[stock]['high'])
+                                stock_info[stock_name] = current_stock_info
+                                stock_alert_file.write(current_stock_info)
+                                stock_alert_file.write("\n")
+                                stock_alert_file.flush()
+                            else:
+                                print("Key already present")
+                            return_object.append(
+                                EntryCandleInformation(counter, prev[stock]['high'], barset, stock, limit, time))
                             print()
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                        maxClose = 0
+                        max_close = 0
 
-                    elif bullOrBearCandle == 'red':
+                    elif bull_or_bear_candle == 'red':
                         downflag = 0
                         upflag = 0
                         bull = 0
                         bear = 0
-                        maxClose = 0
+                        max_close = 0
 
-                    prev = currentCandle;
+                    prev = current_candle;
+                    counter = counter + 1
 
         except Exception as e:
             print(e)
-
+        return return_object
 
     def candleType(self, stock, candle):
         open = candle[stock]['open'];

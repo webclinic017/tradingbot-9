@@ -1,6 +1,3 @@
-import secrets
-from traderlib import *
-
 
 class BullFlagPattern:
 

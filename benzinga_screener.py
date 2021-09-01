@@ -34,4 +34,14 @@ class BenzingaScreener:
         gainerSymbols = gainersSortedByVol['symbol'].values.tolist()
         return gainerSymbols;
 
+    def get_losers_for_session(self):
+        response = requests.get("https://data-api-pro.benzinga.com/rest/movers?apikey="+secrets.BENZINGA_KEY+"&maxResults=100&session=REGULAR&screenerQuery=marketCap_gt_300000000&gainers=true")
+        result = response.json()
+        gainers = result["result"]["losers"]
+        gainersSortedByVol = pd.json_normalize(gainers).sort_values(by=['volume'], ascending=False)
+        print(gainersSortedByVol)
+        gainerSymbols = gainersSortedByVol['symbol'].values.tolist()
+        return gainerSymbols;
+
+
 
