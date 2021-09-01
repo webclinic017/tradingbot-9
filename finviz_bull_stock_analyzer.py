@@ -1,12 +1,13 @@
 import time
 
 import secrets
-from bull_flag_pattern import BullFlagPattern, tradeapi
+from bull_flag_pattern import BullFlagPattern
 from finviz_screener import FinvizScreener
 from bull_flag_verifier import BullFlagVerifier
 from bull_flag_verifier import Transaction
 import os
 from datetime import date
+from traderlib import *
 
 def main():
     finvizScreener = FinvizScreener();
