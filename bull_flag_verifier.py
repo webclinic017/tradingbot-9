@@ -18,12 +18,12 @@ class BullFlagVerifier:
                     if currentCandle[stock]['high'] > first_target:
                         money_made = (first_target - entry)
                         transaction.add(money_made)
-                        print("True Prediction", pattern, "Money Made", money_made, transaction.totalMoneyMade)
+                        print("True Prediction", stock, pattern, "Money Made", money_made, transaction.totalMoneyMade)
                         break;
                     if currentCandle[stock]['low'] < stoploss:
                         money_lost = entry - stoploss;
                         transaction.deduct(money_lost)
-                        print("Wrong Prediction", pattern, "Money Lost", money_lost, transaction.totalMoneyLost)
+                        print("Wrong Prediction", stock,  pattern, "Money Lost", money_lost, transaction.totalMoneyLost)
                         break
             except Exception:
                 pass
