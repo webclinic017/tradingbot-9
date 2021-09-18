@@ -55,8 +55,8 @@ def main():
 
             if realtime == 0:
                 bull_flag_verifier = BullFlagVerifier()
-                bull_flag_verifier.verifyBullFlag(bull_flag1, transaction)
-                bull_flag_verifier.verifyBullFlag(bull_flag2, transaction)
+                bull_flag_verifier.verifyBullFlag(bull_flag1, transaction, "BullFlag1")
+                bull_flag_verifier.verifyBullFlag(bull_flag2, transaction, "BullFlag2")
 
         print("________________________________________________________________________________________________")
 

@@ -1,6 +1,6 @@
 class BullFlagVerifier:
 
-    def verifyBullFlag(self, entry_candle_infos, transaction):
+    def verifyBullFlag(self, entry_candle_infos, transaction, pattern):
         for entry_candle_info in entry_candle_infos:
             try:
                 barset = entry_candle_info.barset;
@@ -18,12 +18,12 @@ class BullFlagVerifier:
                     if currentCandle[stock]['high'] > first_target:
                         money_made = (first_target - entry)
                         transaction.add(money_made)
-                        print("True Prediction", "Money Made", money_made, transaction.totalMoneyMade)
+                        print("True Prediction", pattern, "Money Made", money_made, transaction.totalMoneyMade)
                         break;
                     if currentCandle[stock]['low'] < stoploss:
                         money_lost = entry - stoploss;
                         transaction.deduct(money_lost)
-                        print("Wrong Prediction", "Money Lost", money_lost, transaction.totalMoneyLost)
+                        print("Wrong Prediction", pattern, "Money Lost", money_lost, transaction.totalMoneyLost)
                         break
             except Exception:
                 pass
