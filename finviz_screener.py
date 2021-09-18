@@ -30,6 +30,22 @@ class FinvizScreener:
         return ticker_symbols;
 
 
+    def positive_movers_with_beta_under_2(self):
+        filters = ['sh_avgvol_o1000.5', 'sh_relvol_o1.5','ta_beta_u2','ta_changeopen_u1']  # Shows companies in NASDAQ which are in the S&P500
+        stock_list = Screener(filters=filters, table='Overview', order='-volume')  # Get the performance table and sort it by price ascending
+        # Export the screener results to .csv
+        #stock_list.to_csv("stock.csv")
+        #print(stock_list)
+
+        #df = pd.read_csv("stock.csv")
+        #print(df.head())
+        stock_data = pd.DataFrame(stock_list.data)
+        ticker_symbols = stock_data['Ticker'].values.tolist()
+
+        print(ticker_symbols)
+        return ticker_symbols;
+
+
 
 
     def top_gainers(self):
