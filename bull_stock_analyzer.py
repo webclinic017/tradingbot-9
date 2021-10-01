@@ -13,7 +13,7 @@ def main():
     benzinga_screener = BenzingaScreener();
     finvizScreener = FinvizScreener();
 
-    realtime = 0
+    realtime = 1
     limit = 10
     interval = '5Min';
     if realtime == 0:
@@ -42,6 +42,9 @@ def main():
         try:
             finviz_stocks = finvizScreener.positive_movers_with_beta_over_2()
             stocks = stocks + finviz_stocks;
+            finviz_stocks_200sma = finvizScreener.positive_movers_above_200sma()
+            stocks = stocks + finviz_stocks_200sma;
+
         except Exception as e:
             print("Exception fetching finviz stocks", e)
         print("Total Stocks", len(stocks))
@@ -70,7 +73,7 @@ def main():
         print("________________________________________________________________________________________________")
 
         print("Sleeping")
-        time.sleep(120)
+        time.sleep(60)
 
 
 if __name__ == '__main__':
